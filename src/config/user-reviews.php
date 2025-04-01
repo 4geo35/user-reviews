@@ -8,4 +8,15 @@ return [
 
     // Controllers
     "customWebReviewController" => null,
+
+    // Models
+    "customReviewModel" => null,
+
+    // Observers
+    "customReviewModelObserver" => null,
+
+    // Policy
+    "reviewPolicyTitle" => "Управление отзывами",
+    "reviewPolicyKey" => "reviews",
+    "reviewPolicy" => \GIS\UserReviews\Policies\ReviewPolicy::class,
 ];
