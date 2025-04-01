@@ -15,6 +15,10 @@ return [
     // Observers
     "customReviewModelObserver" => null,
 
+    // Livewire
+    "customWebReviewFormComponent" => null,
+    "customWebReviewListComponent" => null,
+
     // Policy
     "reviewPolicyTitle" => "Управление отзывами",
     "reviewPolicyKey" => "reviews",

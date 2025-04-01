@@ -5,6 +5,9 @@ namespace GIS\UserReviews;
 use GIS\UserReviews\Models\Review;
 use GIS\UserReviews\Observers\ReviewObserver;
 use Illuminate\Support\ServiceProvider;
+use GIS\UserReviews\Livewire\Web\Reviews\FormWire as WebFormWire;
+use GIS\UserReviews\Livewire\Web\Reviews\ListWire as WebListWire;
+use Livewire\Livewire;
 
 class UserReviewsServiceProvider extends ServiceProvider
 {
@@ -29,10 +32,28 @@ class UserReviewsServiceProvider extends ServiceProvider
         // Expand config
         $this->expandConfiguration();
 
+        // Livewire
+        $this->addLivewireComponents();
+
         // Observers
         $reviewObserverClass = config("user-reviews.customReviewModelObserver") ?? ReviewObserver::class;
         $reviewModelClass = config("user-reviews.reviewModelClass") ?? Review::class;
         $reviewModelClass::observe($reviewObserverClass);
+    }
+
+    protected function addLivewireComponents(): void
+    {
+        $component = config("user-reviews.customWebReviewFormComponent");
+        Livewire::component(
+            "ur-web-review-form",
+            $component ?? WebFormWire::class
+        );
+
+        $component = config("user-reviews.customWebReviewListComponent");
+        Livewire::component(
+            "ur-web-review-list",
+            $component ?? WebListWire::class
+        );
     }
 
     protected function expandConfiguration(): void
