@@ -5,6 +5,7 @@ return [
     "webPageUrl" => "reviews",
     "useBreadcrumbs" => true,
     "useH1" => true,
+    "reviewNotificationEmails" => env("USER_REVIEW_NOTIFICATION_EMAILS"),
 
     // Controllers
     "customWebReviewController" => null,

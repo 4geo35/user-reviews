@@ -10,17 +10,24 @@ use GIS\UserReviews\Interfaces\ReviewInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Str;
 
 class Review extends Model implements ReviewInterface
 {
-    use ShouldHumanDate, ShouldHumanPublishDate, ShouldGallery;
+    use ShouldHumanDate, ShouldHumanPublishDate, ShouldGallery, Notifiable;
 
     public $fillable = [
         "name",
         "comment",
         "registered_at",
     ];
+
+    public function routeNotificationForMail(Notification $notification): array
+    {
+        return explode(",", config("user-reviews.reviewNotificationEmails"));
+    }
 
     public function answers(): HasMany
     {

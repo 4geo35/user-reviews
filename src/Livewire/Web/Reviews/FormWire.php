@@ -103,7 +103,7 @@ class FormWire extends Component
             $review = $reviewParent->answers()->create($data);
         } else {
             $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
-            $review = $reviewModelClass::create();
+            $review = $reviewModelClass::create($data);
         }
         $this->addImagesToReview($review);
         session()->flash("review-form-success", "Мы получили Ваше сообщение! Отзыв появится на сайте после проверки модератором.");
