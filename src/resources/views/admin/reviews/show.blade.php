@@ -2,7 +2,8 @@
     <x-slot name="title">Отзыв {{ $review->name }} ({{ $review->id }})</x-slot>
     <x-slot name="pageTitle">Отзыв {{ $review->name }} ({{ $review->id }})</x-slot>
 
-    <div class="space-y-indent-half">
+    <div class="flex flex-col gap-y-indent">
+        <livewire:ur-admin-review-list :review="$review" />
         <livewire:fa-images :model="$review" />
     </div>
 </x-admin-layout>

@@ -14,9 +14,12 @@ class ListWire extends Component
 {
     use WithPagination;
 
+    public ReviewInterface|null $review = null;
+
     public string $searchName = "";
     public string $searchFrom = "";
     public string $searchTo = "";
+    public string $searchPublished = "all";
 
     public bool $displayDelete = false;
     public bool $displayData = false;
@@ -34,24 +37,30 @@ class ListWire extends Component
             "searchName" => ["as" => "name", "except" => ""],
             "searchFrom" => ["as" => "from", "except" => ""],
             "searchTo" => ["as" => "to", "except" => ""],
-            "searchId" => ["as" => "id", "except" => ""],
+            "searchPublished" => ["as" => "published", "except" => "all"],
         ];
     }
 
     public function render(): View
     {
-        $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
-        $query = $reviewModelClass::query()->with("images");
-        BuilderActions::extendLike($query, $this->searchName, "name");
-        BuilderActions::extendDate($query, $this->searchFrom, $this->searchTo);
-        $query->orderBy("created_at", "DESC");
-        $reviews = $query->paginate();
-        return view('ur::livewire.admin.reviews.list-wire', compact('reviews'));
+        if ($this->review) {
+            $reviews = collect([$this->review]);
+        } else {
+            $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
+            $query = $reviewModelClass::query()->with("images", "answers", "parent");
+            BuilderActions::extendLike($query, $this->searchName, "name");
+            BuilderActions::extendDate($query, $this->searchFrom, $this->searchTo);
+            BuilderActions::extendPublished($query, $this->searchPublished);
+            $query->orderBy("created_at", "DESC");
+            $reviews = $query->paginate();
+        }
+        $review = $this->review;
+        return view('ur::livewire.admin.reviews.list-wire', compact('reviews', 'review'));
     }
 
     public function clearSearch(): void
     {
-        $this->reset("searchName", "searchFrom", "searchTo", "searchId");
+        $this->reset("searchName", "searchFrom", "searchTo", "searchPublished");
         $this->resetPage();
     }
 
@@ -117,6 +126,9 @@ class ListWire extends Component
         $review->delete();
         $this->closeDelete();
         session()->flash("success", "Отзыв успешно удален");
+        if ($this->review) {
+            $this->redirectRoute("admin.reviews.index");
+        }
     }
 
     public function switchPublish(int $id): void
@@ -130,11 +142,13 @@ class ListWire extends Component
         $review->update([
             "published_at" => $review->published_at ? null : now(),
         ]);
+        $this->review?->fresh();
     }
 
     protected function resetFields(): void
     {
-        $this->reset("reviewId", "name", "comment", "registeredAt", "review");
+        $this->reset("reviewId", "name", "comment", "registeredAt");
+        $this->review?->fresh();
     }
 
     protected function findModel(): ?ReviewInterface
@@ -158,7 +172,6 @@ class ListWire extends Component
             session()->flash("error", "Неавторизованное действие");
             $this->closeData();
             $this->closeDelete();
-            $this->closeImages();
             return false;
         }
     }

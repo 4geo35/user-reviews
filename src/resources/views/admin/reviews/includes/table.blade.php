@@ -2,10 +2,9 @@
     <x-slot name="head">
         <tr>
             <x-tt::table.heading class="text-left">ID</x-tt::table.heading>
-            <x-tt::table.heading class="text-left">Имя</x-tt::table.heading>
+            <x-tt::table.heading class="text-left">Данные</x-tt::table.heading>
             <x-tt::table.heading class="text-left">Комментарий</x-tt::table.heading>
-            <x-tt::table.heading class="text-left">Изображения</x-tt::table.heading>
-            <x-tt::table.heading class="text-left">Дата</x-tt::table.heading>
+            <x-tt::table.heading class="text-left">Ответы</x-tt::table.heading>
             <x-tt::table.heading>Действия</x-tt::table.heading>
         </tr>
     </x-slot>
@@ -13,32 +12,62 @@
         @foreach($reviews as $item)
             <tr>
                 <td>{{ $item->id }}</td>
-                <td>{{ $item->name }}</td>
+                <td>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between space-x-2">
+                            <div class="font-semibold">Имя:</div>
+                            <div>{{ $item->name }}</div>
+                        </div>
+                        <div class="flex items-center justify-between space-x-2">
+                            <div class="font-semibold">Изображения:</div>
+                            <div>{{ $item->images->count() }}</div>
+                        </div>
+                        <div class="flex items-center justify-between space-x-2">
+                            <div class="font-semibold">Дата:</div>
+                            <div>{{ $item->registered_human }}</div>
+                        </div>
+                    </div>
+                </td>
                 <td>
                     <div class="prose max-w-none prose-sm">
                         {!! $item->markdown !!}
                     </div>
                 </td>
                 <td>
-                    <span class="text-nowrap">
-                        {{ $item->images->count() }} {{ num2word($item->images->count(), ["изображение", "изображения", "изображений"]) }}
-                    </span>
-                </td>
-                <td>
-                    {{ $item->registered_human }}
+                    @if ($item->answers->count())
+                        <ul>
+                            @foreach($item->answers as $answer)
+                                <li>
+                                    <a href="{{ route('admin.reviews.show', ['review' => $answer]) }}"
+                                       class="text-primary hover:text-primary-hover text-nowrap">
+                                        Есть ответ от "{{ $answer->name }}" ({{ $answer->id }})
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @elseif ($item->parent)
+                        <a href="{{ route('admin.reviews.show', ['review' => $item->parent]) }}"
+                           class="text-primary hover:text-primary-hover text-nowrap">
+                            Ответ на отзыв от "{{ $item->parent->name }}" ({{ $item->parent->id }})
+                        </a>
+                    @else
+                        <span>-</span>
+                    @endif
                 </td>
                 <td>
                     <div class="flex items-center justify-center">
-                        @can("viewAny", $item::class)
-                            <a href="{{ route('admin.reviews.show', ['review' => $item]) }}" class="btn btn-primary px-btn-x-ico rounded-e-none">
-                                <x-tt::ico.eye />
-                            </a>
-                        @else
-                            <button type="button" class="btn btn-primary px-btn-x-ico rounded-e-none" disabled>
-                                <x-tt::ico.eye />
-                            </button>
-                        @endcan
-                        <button type="button" class="btn btn-dark px-btn-x-ico rounded-none"
+                        @if (! $review)
+                            @can("viewAny", $item::class)
+                                <a href="{{ route('admin.reviews.show', ['review' => $item]) }}" class="btn btn-primary px-btn-x-ico rounded-e-none">
+                                    <x-tt::ico.eye />
+                                </a>
+                            @else
+                                <button type="button" class="btn btn-primary px-btn-x-ico rounded-e-none" disabled>
+                                    <x-tt::ico.eye />
+                                </button>
+                            @endcan
+                        @endif
+                        <button type="button" class="btn btn-dark px-btn-x-ico {{ $review ? 'rounded-e-none' : 'rounded-none' }}"
                                 @cannot("update", $item) disabled
                                 @else wire:loading.attr="disabled"
                                 @endcannot
@@ -70,9 +99,11 @@
         @endforeach
     </x-slot>
     <x-slot name="caption">
-        <div class="flex justify-between">
-            <div>{{ __("Total") }}: {{ $reviews->total() }}</div>
-            {{ $reviews->links("tt::pagination.live") }}
-        </div>
+        @if (! $review)
+            <div class="flex justify-between">
+                <div>{{ __("Total") }}: {{ $reviews->total() }}</div>
+                {{ $reviews->links("tt::pagination.live") }}
+            </div>
+        @endif
     </x-slot>
 </x-tt::table>

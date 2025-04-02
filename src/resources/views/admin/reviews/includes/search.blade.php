@@ -1,6 +1,11 @@
 <div class="space-y-indent-half">
     <div class="flex flex-col space-y-indent-half md:flex-row md:space-x-indent-half md:space-y-0">
         <input type="text" aria-label="Имя" placeholder="Имя" class="form-control" wire:model.live="searchName">
+        <select class="form-select" aria-label="Статус публикации" wire:model.live="searchPublished">
+            <option value="all">Любая публикация</option>
+            <option value="yes">Опубликовано</option>
+            <option value="no">Снаято с публикации</option>
+        </select>
         <div class="flex">
             <div class="form-control rounded-e-none">
                 Дата:

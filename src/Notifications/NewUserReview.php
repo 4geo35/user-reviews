@@ -35,7 +35,7 @@ class NewUserReview extends Notification implements ShouldQueue
             ->subject('Зарегистрирован новый отзыв на сайте')
             ->markdown("ur::mail.reviews.new-review", [
                 "review" => $notifiable,
-                "url" => "/",
+                "url" => route('admin.reviews.show', ['review' => $notifiable]),
             ]);
     }
 }
