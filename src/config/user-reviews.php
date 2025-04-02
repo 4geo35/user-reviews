@@ -9,6 +9,7 @@ return [
 
     // Controllers
     "customWebReviewController" => null,
+    "customAdminReviewController" => null,
 
     // Models
     "customReviewModel" => null,
