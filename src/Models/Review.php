@@ -10,6 +10,7 @@ use GIS\UserReviews\Interfaces\ReviewInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Review extends Model implements ReviewInterface
 {
@@ -34,5 +35,19 @@ class Review extends Model implements ReviewInterface
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id");
+    }
+
+    public function getMarkdownAttribute(): string
+    {
+        $comment = $this->comment;
+        if (empty($comment)) { return ""; }
+        return Str::markdown($comment);
+    }
+
+    public function getRegisteredHumanAttribute()
+    {
+        $value = $this->registered_at;
+        if (empty($value)) return $value;
+        return date_helper()->format($value, "d.m.Y");
     }
 }

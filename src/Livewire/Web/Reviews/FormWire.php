@@ -21,6 +21,8 @@ class FormWire extends Component
     public string $comment = '';
     public array $images = [];
 
+    public int|null $reviewId = null;
+
     public bool $hasImageErrors = false;
 
     public function rules(): array
@@ -64,6 +66,17 @@ class FormWire extends Component
         $this->displayForm = true;
     }
 
+    #[On("show-answer-form")]
+    public function showAnswerForm(int $id): void
+    {
+        $this->resetFields();
+        $this->reviewId = $id;
+        $review = $this->findModel();
+        if (! $review) { return; }
+
+        $this->displayForm = true;
+    }
+
     public function closeForm(): void
     {
         $this->displayForm = false;
@@ -77,11 +90,21 @@ class FormWire extends Component
     public function store(): void
     {
         $this->validate();
-        $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
-        $review = $reviewModelClass::create([
+        $data = [
             "name" => $this->name,
             "comment" => $this->comment,
-        ]);
+        ];
+        if ($this->reviewId) {
+            $reviewParent = $this->findModel();
+            if (! $reviewParent) {
+                $this->closeForm();
+                return;
+            }
+            $review = $reviewParent->answers()->create($data);
+        } else {
+            $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
+            $review = $reviewModelClass::create();
+        }
         $this->addImagesToReview($review);
         session()->flash("review-form-success", "Мы получили Ваше сообщение! Отзыв появится на сайте после проверки модератором.");
         $this->resetFields();
@@ -105,6 +128,17 @@ class FormWire extends Component
 
     protected function resetFields(): void
     {
-        $this->reset("name", "comment", "images");
+        $this->reset("name", "comment", "images", "reviewId");
+    }
+
+    protected function findModel(): ?ReviewInterface
+    {
+        $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
+        $review = $reviewModelClass::find($this->reviewId);
+        if (!$review) {
+            $this->dispatch("review-not-found");
+            return null;
+        }
+        return $review;
     }
 }

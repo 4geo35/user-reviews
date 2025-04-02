@@ -1,5 +1,11 @@
 <x-tt::modal.aside wire:model="displayForm" direction="left">
-    <x-slot name="title">Оставить отзыв</x-slot>
+    <x-slot name="title">
+        @if ($reviewId)
+            Ответить на отзыв
+        @else
+            Оставить отзыв
+        @endif
+    </x-slot>
     <x-slot name="content">
         <form wire:submit.prevent="store" class="space-y-indent-half" id="reviewForm">
             <x-tt::notifications.error prefix="review-form-" />

@@ -3,7 +3,7 @@
         <div class="col w-2/3">
             <livewire:ur-web-review-list />
         </div>
-        <div class="col w-1/3">
+        <div class="col w-1/3 relative">
             @include("ur::web.includes.fire-form-button")
         </div>
     </div>
