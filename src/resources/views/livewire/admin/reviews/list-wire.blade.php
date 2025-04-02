@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col w-full">
-        <div class="card">
+        <div class="card" x-data="{ showImages: 0 }">
             <div class="card-body">
                 <div class="space-y-indent-half">
                     @include("ur::admin.reviews.includes.search")

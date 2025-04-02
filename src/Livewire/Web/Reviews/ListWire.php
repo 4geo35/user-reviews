@@ -15,10 +15,14 @@ class ListWire extends Component
     {
         $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
         $reviews = $reviewModelClass::query()
-            ->with(["images", "answers" => function ($query) {
+            ->with(["images" => function ($query) {
+                $query->orderBy("priority");
+            }, "answers" => function ($query) {
                 $query
                     ->whereNotNull("published_at")
-                    ->with("images")
+                    ->with(["images" => function ($query) {
+                        $query->orderBy("priority");
+                    }])
                     ->orderBy("registered_at", "DESC");
             }])
             ->whereNull("review_id")

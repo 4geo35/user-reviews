@@ -28,7 +28,6 @@ class ListWire extends Component
     public string $registeredAt = "";
 
     public int|null $reviewId = null;
-    public ReviewInterface|null $review = null;
 
     protected function queryString(): array
     {
@@ -94,24 +93,6 @@ class ListWire extends Component
         $this->closeData();
     }
 
-    public function showImages(int $id): void
-    {
-        $this->resetFields();
-        $this->reviewId = $id;
-        $review = $this->findModel();
-        if (! $review) { return; }
-        if (! $this->checkAuth("update", $review)) { return; }
-
-        $this->review = $review;
-        $this->displayImages = true;
-    }
-
-    public function closeImages(): void
-    {
-        $this->resetFields();
-        $this->displayImages = false;
-    }
-
     public function showDelete(int $id): void
     {
         $this->resetFields();
@@ -155,7 +136,7 @@ class ListWire extends Component
 
     protected function resetFields(): void
     {
-        $this->reset("reviewId", "name", "comment", "registeredAt", "review");
+        $this->reset("reviewId", "name", "comment", "registeredAt");
     }
 
     protected function findModel(): ?ReviewInterface

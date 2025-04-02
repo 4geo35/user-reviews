@@ -29,27 +29,29 @@
                 <x-tt::form.error name="comment"/>
             </div>
 
-            <div>
-                @php($imageCount = count($images))
-                <label for="reviewImages"
-                       class="p-indent-half form-control cursor-pointer {{ $errors->has('images.*') ? 'border-danger' : '' }}">
+            @if (\Illuminate\Support\Facades\Auth::check())
+                <div>
+                    @php($imageCount = count($images))
+                    <label for="reviewImages"
+                           class="p-indent-half form-control cursor-pointer {{ $errors->has('images.*') ? 'border-danger' : '' }}">
+                        @if ($imageCount)
+                            <span>Выбрано {{ $imageCount }} {{ num2word($imageCount, ["изображение", "изображения", "изображений"]) }}</span>
+                        @else
+                            <span>Выберите изображения</span>
+                        @endif
+                    </label>
                     @if ($imageCount)
-                        <span>Выбрано {{ $imageCount }} {{ num2word($imageCount, ["изображение", "изображения", "изображений"]) }}</span>
-                    @else
-                        <span>Выберите изображения</span>
+                        <button type="button" class="text-primary font-semibold mt-2 cursor-pointer" wire:click="resetImages">
+                            Отменить выбор изображений
+                        </button>
                     @endif
-                </label>
-                @if ($imageCount)
-                    <button type="button" class="text-primary font-semibold mt-2 cursor-pointer" wire:click="resetImages">
-                        Отменить выбор изображений
-                    </button>
-                @endif
-                <input type="file" id="reviewImages" multiple aria-label="Изображения"
-                       class="form-control hidden"
-                       wire:model.lazy="images">
+                    <input type="file" id="reviewImages" multiple aria-label="Изображения"
+                           class="form-control hidden"
+                           wire:model.lazy="images">
 
-                <x-tt::form.error name="images.*"/>
-            </div>
+                    <x-tt::form.error name="images.*"/>
+                </div>
+            @endif
 
             <div class="flex items-center space-x-indent-half">
                 <button type="button" class="btn btn-outline-secondary" wire:click="closeForm">Отмена</button>
