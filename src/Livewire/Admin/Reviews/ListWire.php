@@ -15,7 +15,6 @@ class ListWire extends Component
     use WithPagination;
 
     public string $searchName = "";
-    public string $searchId = "";
     public string $searchFrom = "";
     public string $searchTo = "";
 
@@ -45,7 +44,6 @@ class ListWire extends Component
         $query = $reviewModelClass::query()->with("images");
         BuilderActions::extendLike($query, $this->searchName, "name");
         BuilderActions::extendDate($query, $this->searchFrom, $this->searchTo);
-        BuilderActions::extendLike($query, $this->searchId, "id");
         $query->orderBy("created_at", "DESC");
         $reviews = $query->paginate();
         return view('ur::livewire.admin.reviews.list-wire', compact('reviews'));
@@ -136,7 +134,7 @@ class ListWire extends Component
 
     protected function resetFields(): void
     {
-        $this->reset("reviewId", "name", "comment", "registeredAt");
+        $this->reset("reviewId", "name", "comment", "registeredAt", "review");
     }
 
     protected function findModel(): ?ReviewInterface

@@ -5,6 +5,7 @@
             <x-tt::table.heading class="text-left">Имя</x-tt::table.heading>
             <x-tt::table.heading class="text-left">Комментарий</x-tt::table.heading>
             <x-tt::table.heading class="text-left">Изображения</x-tt::table.heading>
+            <x-tt::table.heading class="text-left">Дата</x-tt::table.heading>
             <x-tt::table.heading>Действия</x-tt::table.heading>
         </tr>
     </x-slot>
@@ -24,14 +25,19 @@
                     </span>
                 </td>
                 <td>
+                    {{ $item->registered_human }}
+                </td>
+                <td>
                     <div class="flex items-center justify-center">
-                        <button type="button" class="btn btn-primary px-btn-x-ico rounded-e-none"
-                                @cannot("update", $item) disabled
-                                @else wire:loading.attr="disabled"
-                                @endcannot
-                                @click="showImages = showImages === {{ $item->id }} ? 0 : {{ $item->id }}">
-                            <x-tt::ico.image />
-                        </button>
+                        @can("viewAny", $item::class)
+                            <a href="{{ route('admin.reviews.show', ['review' => $item]) }}" class="btn btn-primary px-btn-x-ico rounded-e-none">
+                                <x-tt::ico.eye />
+                            </a>
+                        @else
+                            <button type="button" class="btn btn-primary px-btn-x-ico rounded-e-none" disabled>
+                                <x-tt::ico.eye />
+                            </button>
+                        @endcan
                         <button type="button" class="btn btn-dark px-btn-x-ico rounded-none"
                                 @cannot("update", $item) disabled
                                 @else wire:loading.attr="disabled"
@@ -59,11 +65,6 @@
                             @endif
                         </button>
                     </div>
-                </td>
-            </tr>
-            <tr x-show="showImages === {{ $item->id }}" style="display: none">
-                <td colspan="5">
-                    <livewire:fa-images :model="$item" no-card-cover wire:key="{{ $item->id }}" />
                 </td>
             </tr>
         @endforeach

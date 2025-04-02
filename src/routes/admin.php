@@ -12,5 +12,6 @@ Route::middleware(["web", "auth", "app-management"])
             ->group(function () {
                 $controllerClass = config("user-reviews.customAdminReviewController") ?? ReviewController::class;
                 Route::get("/", [$controllerClass, "index"])->name("index");
+                Route::get("/{review}", [$controllerClass, "show"])->name("show");
             });
     });

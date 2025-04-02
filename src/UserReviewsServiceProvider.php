@@ -2,6 +2,7 @@
 
 namespace GIS\UserReviews;
 
+use GIS\UserReviews\Interfaces\ReviewInterface;
 use GIS\UserReviews\Models\Review;
 use GIS\UserReviews\Observers\ReviewObserver;
 use Illuminate\Support\ServiceProvider;
@@ -23,6 +24,9 @@ class UserReviewsServiceProvider extends ServiceProvider
         // Routes
         $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/routes/admin.php');
+
+        // Bindings
+        $this->bindInterfaces();
     }
 
     public function boot(): void
@@ -38,8 +42,14 @@ class UserReviewsServiceProvider extends ServiceProvider
 
         // Observers
         $reviewObserverClass = config("user-reviews.customReviewModelObserver") ?? ReviewObserver::class;
-        $reviewModelClass = config("user-reviews.reviewModelClass") ?? Review::class;
+        $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
         $reviewModelClass::observe($reviewObserverClass);
+    }
+
+    protected function bindInterfaces(): void
+    {
+        $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
+        $this->app->bind(ReviewInterface::class, $reviewModelClass);
     }
 
     protected function addLivewireComponents(): void
