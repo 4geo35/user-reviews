@@ -22,6 +22,7 @@ class Review extends Model implements ReviewInterface
         "name",
         "comment",
         "registered_at",
+        "published_at",
     ];
 
     public function routeNotificationForMail(Notification $notification): array
