@@ -5,6 +5,7 @@ namespace GIS\UserReviews\Interfaces;
 use ArrayAccess;
 use GIS\Fileable\Interfaces\ShouldGalleryInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use JsonSerializable;
 use Stringable;
 use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
@@ -17,5 +18,7 @@ use Illuminate\Contracts\Support\Jsonable;
 interface ReviewInterface extends Arrayable, ArrayAccess, CanBeEscapedWhenCastToString,
     HasBroadcastChannel, Jsonable, JsonSerializable, QueueableEntity, Stringable, UrlRoutable, ShouldGalleryInterface
 {
+    public function answers(): HasMany;
+    public function parent(): BelongsTo;
     public function user(): BelongsTo;
 }

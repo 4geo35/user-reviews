@@ -2,6 +2,8 @@
     <x-slot name="title">Оставить отзыв</x-slot>
     <x-slot name="content">
         <form wire:submit.prevent="store" class="space-y-indent-half" id="reviewForm">
+            <x-tt::notifications.error prefix="review-form-" />
+            <x-tt::notifications.success prefix="review-form-" />
             <div>
                 <input type="text" id="reviewName" placeholder="Ваше имя*" aria-label="Ваше имя"
                        class="form-control {{ $errors->has("name") ? "border-danger" : "" }}"
@@ -22,15 +24,20 @@
             </div>
 
             <div>
+                @php($imageCount = count($images))
                 <label for="reviewImages"
                        class="p-indent-half form-control cursor-pointer {{ $errors->has('images.*') ? 'border-danger' : '' }}">
-                    @php($imageCount = count($images))
                     @if ($imageCount)
                         <span>Выбрано {{ $imageCount }} {{ num2word($imageCount, ["изображение", "изображения", "изображений"]) }}</span>
                     @else
                         <span>Выберите изображения</span>
                     @endif
                 </label>
+                @if ($imageCount)
+                    <button type="button" class="text-primary font-semibold mt-2 cursor-pointer" wire:click="resetImages">
+                        Отменить выбор изображений
+                    </button>
+                @endif
                 <input type="file" id="reviewImages" multiple aria-label="Изображения"
                        class="form-control hidden"
                        wire:model.lazy="images">
