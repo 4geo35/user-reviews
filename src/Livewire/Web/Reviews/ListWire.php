@@ -16,11 +16,13 @@ class ListWire extends Component
         $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
         $reviews = $reviewModelClass::query()
             ->with(["images", "answers" => function ($query) {
-                // TODO: only published
-                $query->with("images")->orderBy("registered_at", "DESC");
+                $query
+                    ->whereNotNull("published_at")
+                    ->with("images")
+                    ->orderBy("registered_at", "DESC");
             }])
             ->whereNull("review_id")
-            // TODO: only published
+            ->whereNotNull("published_at")
             ->orderBy("registered_at", "DESC")
             ->paginate();
         return view('ur::livewire.web.reviews.list-wire', compact('reviews'));
