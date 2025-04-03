@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use GIS\UserReviews\Livewire\Web\Reviews\FormWire as WebFormWire;
 use GIS\UserReviews\Livewire\Web\Reviews\ListWire as WebListWire;
 use GIS\UserReviews\Livewire\Admin\Reviews\ListWire as AdminListWire;
+use GIS\UserReviews\Livewire\Admin\Reviews\ShowWire as AdminShowWire;
 use Livewire\Livewire;
 
 class UserReviewsServiceProvider extends ServiceProvider
@@ -70,6 +71,12 @@ class UserReviewsServiceProvider extends ServiceProvider
         Livewire::component(
             "ur-admin-review-list",
             $component ?? AdminListWire::class
+        );
+
+        $component = config("user-reviews.customAdminReviewShowComponent");
+        Livewire::component(
+            "ur-admin-review-show",
+            $component ?? AdminShowWire::class
         );
     }
 

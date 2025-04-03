@@ -3,9 +3,7 @@
         <div class="card" x-data="{ showImages: 0 }">
             <div class="card-body">
                 <div class="space-y-indent-half">
-                    @if (! $review)
-                        @include("ur::admin.reviews.includes.search")
-                    @endif
+                    @include("ur::admin.reviews.includes.search")
                     <x-tt::notifications.error />
                     <x-tt::notifications.success />
                 </div>

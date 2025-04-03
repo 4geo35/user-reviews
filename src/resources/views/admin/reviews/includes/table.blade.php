@@ -34,40 +34,20 @@
                     </div>
                 </td>
                 <td>
-                    @if ($item->answers->count())
-                        <ul>
-                            @foreach($item->answers as $answer)
-                                <li>
-                                    <a href="{{ route('admin.reviews.show', ['review' => $answer]) }}"
-                                       class="text-primary hover:text-primary-hover text-nowrap">
-                                        Есть ответ от "{{ $answer->name }}" ({{ $answer->id }})
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @elseif ($item->parent)
-                        <a href="{{ route('admin.reviews.show', ['review' => $item->parent]) }}"
-                           class="text-primary hover:text-primary-hover text-nowrap">
-                            Ответ на отзыв от "{{ $item->parent->name }}" ({{ $item->parent->id }})
-                        </a>
-                    @else
-                        <span>-</span>
-                    @endif
+                    @include("ur::admin.reviews.includes.answers", ["review" => $item])
                 </td>
                 <td>
                     <div class="flex items-center justify-center">
-                        @if (! $review)
-                            @can("viewAny", $item::class)
-                                <a href="{{ route('admin.reviews.show', ['review' => $item]) }}" class="btn btn-primary px-btn-x-ico rounded-e-none">
-                                    <x-tt::ico.eye />
-                                </a>
-                            @else
-                                <button type="button" class="btn btn-primary px-btn-x-ico rounded-e-none" disabled>
-                                    <x-tt::ico.eye />
-                                </button>
-                            @endcan
-                        @endif
-                        <button type="button" class="btn btn-dark px-btn-x-ico {{ $review ? 'rounded-e-none' : 'rounded-none' }}"
+                        @can("viewAny", $item::class)
+                            <a href="{{ route('admin.reviews.show', ['review' => $item]) }}" class="btn btn-primary px-btn-x-ico rounded-e-none">
+                                <x-tt::ico.eye />
+                            </a>
+                        @else
+                            <button type="button" class="btn btn-primary px-btn-x-ico rounded-e-none" disabled>
+                                <x-tt::ico.eye />
+                            </button>
+                        @endcan
+                        <button type="button" class="btn btn-dark px-btn-x-ico rounded-none"
                                 @cannot("update", $item) disabled
                                 @else wire:loading.attr="disabled"
                                 @endcannot
@@ -99,11 +79,9 @@
         @endforeach
     </x-slot>
     <x-slot name="caption">
-        @if (! $review)
-            <div class="flex justify-between">
-                <div>{{ __("Total") }}: {{ $reviews->total() }}</div>
-                {{ $reviews->links("tt::pagination.live") }}
-            </div>
-        @endif
+        <div class="flex justify-between">
+            <div>{{ __("Total") }}: {{ $reviews->total() }}</div>
+            {{ $reviews->links("tt::pagination.live") }}
+        </div>
     </x-slot>
 </x-tt::table>

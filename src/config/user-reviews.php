@@ -20,6 +20,8 @@ return [
     // Livewire
     "customWebReviewFormComponent" => null,
     "customWebReviewListComponent" => null,
+    "customAdminReviewListComponent" => null,
+    "customAdminReviewShowComponent" => null,
 
     // Policy
     "reviewPolicyTitle" => "Управление отзывами",
