@@ -20,6 +20,7 @@ class ListWire extends Component
     public string $searchFrom = "";
     public string $searchTo = "";
     public string $searchPublished = "all";
+    public string $searchId = "";
 
     public bool $displayDelete = false;
     public bool $displayData = false;
@@ -51,6 +52,7 @@ class ListWire extends Component
             BuilderActions::extendLike($query, $this->searchName, "name");
             BuilderActions::extendDate($query, $this->searchFrom, $this->searchTo);
             BuilderActions::extendPublished($query, $this->searchPublished);
+            BuilderActions::extendLike($query, $this->searchId, "id");
             $query->orderBy("created_at", "DESC");
             $reviews = $query->paginate();
         }
@@ -60,7 +62,7 @@ class ListWire extends Component
 
     public function clearSearch(): void
     {
-        $this->reset("searchName", "searchFrom", "searchTo", "searchPublished");
+        $this->reset("searchName", "searchFrom", "searchTo", "searchPublished", "searchId");
         $this->resetPage();
     }
 
@@ -122,6 +124,12 @@ class ListWire extends Component
         $review = $this->findModel();
         if (! $review) { return; }
         if (! $this->checkAuth("delete", $review)) { return; }
+
+        if ($review->answers->count() > 0) {
+            session()->flash("error", "Невозможно удалить отзыв, у которого есть ответы");
+            $this->closeDelete();
+            return;
+        }
 
         $review->delete();
         $this->closeDelete();
