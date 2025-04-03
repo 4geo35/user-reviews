@@ -85,6 +85,7 @@ class FormWire extends Component
     public function resetImages(): void
     {
         $this->reset("images");
+        $this->hasImageErrors = false;
     }
 
     public function store(): void

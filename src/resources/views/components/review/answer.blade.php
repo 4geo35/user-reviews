@@ -1,5 +1,5 @@
 @props(["review"])
-<div class="p-indent ml-indent border-l border-stroke border-dotted">
+<div class="px-indent-double py-indent border-l border-stroke border-dotted">
     <div class="flex items-end justify-between pb-indent-half border-b border-stroke">
         <div class="text-xl font-semibold">{{ $review->name }}</div>
         <div class="font-semibold text-body/40">{{ $review->registered_human }}</div>
