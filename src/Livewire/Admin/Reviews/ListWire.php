@@ -6,6 +6,7 @@ use GIS\TraitsHelpers\Facades\BuilderActions;
 use GIS\UserReviews\Interfaces\ReviewInterface;
 use GIS\UserReviews\Models\Review;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -32,6 +33,24 @@ class ListWire extends Component
 
     public int|null $reviewId = null;
 
+    public function rules(): array
+    {
+        return [
+            "name" => ["required", "string", "max:255"],
+            "comment" => ["required", "string"],
+            "registeredAt" => ["required", "date"],
+        ];
+    }
+
+    public function validationAttributes(): array
+    {
+        return [
+            "name" => "Имя",
+            "comment" => "Комментарий",
+            "registeredAt" => "Дата отзыва",
+        ];
+    }
+
     protected function queryString(): array
     {
         return [
@@ -50,10 +69,10 @@ class ListWire extends Component
             $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
             $query = $reviewModelClass::query()->with("images", "answers", "parent");
             BuilderActions::extendLike($query, $this->searchName, "name");
-            BuilderActions::extendDate($query, $this->searchFrom, $this->searchTo);
+            BuilderActions::extendDate($query, $this->searchFrom, $this->searchTo, "registered_at");
             BuilderActions::extendPublished($query, $this->searchPublished);
             BuilderActions::extendLike($query, $this->searchId, "id");
-            $query->orderBy("created_at", "DESC");
+            $query->orderBy("registered_at", "DESC");
             $reviews = $query->paginate();
         }
         $review = $this->review;
@@ -82,7 +101,7 @@ class ListWire extends Component
 
         $this->name = $review->name;
         $this->comment = $review->comment;
-        $this->registeredAt = $review->registered_at;
+        $this->registeredAt = Carbon::parse($review->registered_at)->format("Y-m-d H:i");
         $this->displayData = true;
     }
 
