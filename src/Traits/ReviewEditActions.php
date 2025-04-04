@@ -130,7 +130,6 @@ trait ReviewEditActions
         $review->update([
             "published_at" => $review->published_at ? null : now(),
         ]);
-        $this->review?->fresh();
     }
 
     protected function resetFields(): void

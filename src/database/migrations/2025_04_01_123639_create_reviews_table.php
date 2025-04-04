@@ -20,6 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->dateTime("published_at")->nullable();
             $table->dateTime("registered_at")->nullable();
+
+            $table->unsignedBigInteger("reviewable_id")->nullable();
+            $table->unsignedBigInteger("reviewable_type")->nullable();
+
             $table->timestamps();
         });
     }

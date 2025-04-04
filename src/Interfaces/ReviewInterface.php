@@ -6,6 +6,7 @@ use ArrayAccess;
 use GIS\Fileable\Interfaces\ShouldGalleryInterface;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use JsonSerializable;
 use Stringable;
 use Illuminate\Contracts\Broadcasting\HasBroadcastChannel;
@@ -21,4 +22,5 @@ interface ReviewInterface extends Arrayable, ArrayAccess, CanBeEscapedWhenCastTo
     public function answers(): HasMany;
     public function parent(): BelongsTo;
     public function user(): BelongsTo;
+    public function reviewable(): MorphTo;
 }
