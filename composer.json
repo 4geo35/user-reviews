@@ -10,11 +10,11 @@
         }
     ],
     "require": {
-        "4geo35/tailwindcss-theme": "@dev",
-        "4geo35/user-management": "@dev",
-        "4geo35/traits-helpers": "@dev",
-        "4geo35/metable": "@dev",
-        "4geo35/fileable": "@dev"
+        "4geo35/tailwindcss-theme": "^1.1",
+        "4geo35/user-management": "^1.0",
+        "4geo35/traits-helpers": "^1.0",
+        "4geo35/metable": "^1.0",
+        "4geo35/fileable": "^1.1"
     },
     "autoload": {
         "psr-4": {
