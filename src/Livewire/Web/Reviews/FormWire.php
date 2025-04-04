@@ -4,6 +4,7 @@ namespace GIS\UserReviews\Livewire\Web\Reviews;
 
 use GIS\Fileable\Events\NewImageEvent;
 use GIS\UserReviews\Interfaces\ReviewInterface;
+use GIS\UserReviews\Interfaces\ShouldReviewsInterface;
 use GIS\UserReviews\Models\Review;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -14,6 +15,8 @@ use Livewire\WithFileUploads;
 class FormWire extends Component
 {
     use WithFileUploads;
+
+    public ShouldReviewsInterface|null $model = null;
 
     public bool $displayForm = false;
 
@@ -103,8 +106,12 @@ class FormWire extends Component
             }
             $review = $reviewParent->answers()->create($data);
         } else {
-            $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
-            $review = $reviewModelClass::create($data);
+            if ($this->model) {
+                $review = $this->model->reviews()->create($data);
+            } else {
+                $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
+                $review = $reviewModelClass::create($data);
+            }
         }
         $this->addImagesToReview($review);
         session()->flash("review-form-success", "Мы получили Ваше сообщение! Отзыв появится на сайте после проверки модератором.");

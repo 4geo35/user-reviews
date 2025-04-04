@@ -2,6 +2,7 @@
 
 namespace GIS\UserReviews\Livewire\Web\Reviews;
 
+use GIS\UserReviews\Interfaces\ShouldReviewsInterface;
 use GIS\UserReviews\Models\Review;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -11,11 +12,19 @@ use Livewire\Attributes\On;
 class ListWire extends Component
 {
     use WithPagination;
+
+    public ShouldReviewsInterface|null $model = null;
+
     public function render(): View
     {
-        $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
-        $reviews = $reviewModelClass::query()
-            ->with(["images" => function ($query) {
+        if ($this->model) {
+            $query = $this->model->reviews();
+        } else {
+            $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
+            $query = $reviewModelClass::query();
+        }
+
+        $query->with(["images" => function ($query) {
                 $query->orderBy("priority");
             }, "answers" => function ($query) {
                 $query
@@ -24,11 +33,18 @@ class ListWire extends Component
                         $query->orderBy("priority");
                     }])
                     ->orderBy("registered_at", "DESC");
-            }])
-            ->whereNull("review_id")
+            }]);
+
+        if (! $this->model) {
+            $query->whereNull("reviewable_id")
+                ->whereNull("reviewable_type");
+        }
+
+        $query->whereNull("review_id")
             ->whereNotNull("published_at")
-            ->orderBy("registered_at", "DESC")
-            ->paginate();
+            ->orderBy("registered_at", "DESC");
+
+        $reviews = $query->paginate();
         return view('ur::livewire.web.reviews.list-wire', compact('reviews'));
     }
 

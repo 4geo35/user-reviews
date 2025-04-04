@@ -22,7 +22,7 @@ return new class extends Migration
             $table->dateTime("registered_at")->nullable();
 
             $table->unsignedBigInteger("reviewable_id")->nullable();
-            $table->unsignedBigInteger("reviewable_type")->nullable();
+            $table->string("reviewable_type")->nullable();
 
             $table->timestamps();
         });
