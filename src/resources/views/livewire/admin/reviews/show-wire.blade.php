@@ -36,6 +36,19 @@
                              @include("ur::admin.reviews.includes.answers", ["review" => $review])
                          </div>
                      </div>
+
+                     @if ($review->reviewable)
+                         <div class="row">
+                             <div class="col w-full xs:w-2/5 mb-indent-half xs:mb-0">
+                                 <h3 class="font-semibold">Связь</h3>
+                             </div>
+                             <div class="col w-full xs:w-3/5 mb-indent-half xs:mb-0">
+                                 <a href="{{ $review->reviewable->admin_url }}" class="text-primary hover:text-primary-hover text-nowrap">
+                                     {{ $review->reviewable->{$morphSearchBy} }}
+                                 </a>
+                             </div>
+                         </div>
+                     @endif
                  </div>
                  <div class="col w-full md:w-1/2 mb-indent-half md:mb-0">
                      <div class="mb-2">

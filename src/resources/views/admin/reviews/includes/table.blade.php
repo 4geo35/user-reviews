@@ -5,6 +5,9 @@
             <x-tt::table.heading class="text-left">Данные</x-tt::table.heading>
             <x-tt::table.heading class="text-left">Комментарий</x-tt::table.heading>
             <x-tt::table.heading class="text-left">Ответы</x-tt::table.heading>
+            @if ($currentMorph !== 'none')
+                <x-tt::table.heading class="text-left">Связь</x-tt::table.heading>
+            @endif
             <x-tt::table.heading>Действия</x-tt::table.heading>
         </tr>
     </x-slot>
@@ -36,6 +39,13 @@
                 <td>
                     @include("ur::admin.reviews.includes.answers", ["review" => $item])
                 </td>
+                @if ($currentMorph !== 'none')
+                    <td>
+                        <a href="{{ $item->reviewable->admin_url }}" class="text-primary hover:text-primary-hover text-nowrap">
+                            {{ $item->reviewable->{$morphSearchBy} }}
+                        </a>
+                    </td>
+                @endif
                 <td>
                     <div class="flex items-center justify-center">
                         @can("viewAny", $item::class)

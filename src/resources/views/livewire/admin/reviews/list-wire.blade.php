@@ -1,4 +1,5 @@
 <div class="row">
+    @include("ur::admin.reviews.includes.model-switch")
     <div class="col w-full">
         <div class="card" x-data="{ showImages: 0 }">
             <div class="card-body">

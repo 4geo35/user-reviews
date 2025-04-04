@@ -9,4 +9,6 @@ interface ShouldReviewsInterface
     public function reviews(): MorphMany;
 
     public function clearReviews(): void;
+
+    public function getAdminUrlAttribute(): string;
 }
