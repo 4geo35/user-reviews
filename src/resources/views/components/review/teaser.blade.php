@@ -1,7 +1,7 @@
 @props(["review"])
-<div class="p-indent-double bg-light/25 rounded-base space-y-indent-half">
+<div class="p-indent xl:p-indent-double bg-light/25 rounded-base space-y-indent-half">
     <div class="flex items-end justify-between pb-indent-half border-b border-stroke">
-        <div class="text-xl font-semibold">{{ $review->name }}</div>
+        <div class="text-lg xl:text-xl font-semibold">{{ $review->name }}</div>
         <div class="font-semibold text-body/40">{{ $review->registered_human }}</div>
     </div>
 
@@ -10,10 +10,10 @@
     </div>
 
     @if ($review->images->count())
-        <div class="flex flex-wrap items-center -mx-2">
+        <div class="flex flex-wrap items-center -mx-1">
             @foreach($review->images as $image)
                 <a href="{{ route('thumb-img', ['filename' => $image->filename, 'template' => 'original']) }}"
-                   class="block mx-2 my-2 basis-auto shrink-0" data-fslightbox="lightbox-{{ $review->id }}">
+                   class="block mx-1 my-1 basis-auto shrink-0" data-fslightbox="lightbox-{{ $review->id }}">
                     <img src="{{ route('thumb-img', ['filename' => $image->filename, 'template' => 'gallery-preview']) }}" alt=""
                          class="rounded-md">
                 </a>
