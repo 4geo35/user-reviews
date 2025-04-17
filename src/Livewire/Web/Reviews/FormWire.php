@@ -23,6 +23,7 @@ class FormWire extends Component
     public string $name = '';
     public string $comment = '';
     public array $images = [];
+    public bool $privacy = true;
 
     public int|null $reviewId = null;
 
@@ -34,6 +35,7 @@ class FormWire extends Component
             "name" => ["required", "string", "max:255"],
             "comment" => ["required", "string"],
             "images.*" => ["nullable", "image", "mimes:jpeg,png,jpg,webp", "max:2048"],
+            "privacy" => ["required"],
         ];
     }
 
@@ -43,6 +45,7 @@ class FormWire extends Component
             "name" => "Ваше имя",
             "comment" => "Комментарий",
             "images.*" => "Изображения",
+            "privacy" => "Политика конфиденциальности",
         ];
     }
 
@@ -136,7 +139,7 @@ class FormWire extends Component
 
     protected function resetFields(): void
     {
-        $this->reset("name", "comment", "images", "reviewId");
+        $this->reset("name", "comment", "images", "reviewId", "privacy");
     }
 
     protected function findModel(): ?ReviewInterface

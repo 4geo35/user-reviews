@@ -53,6 +53,16 @@
                 </div>
             @endif
 
+            <div class="form-check">
+                <input type="checkbox" wire:model="privacy"
+                       required
+                       id="reviewPolicy"
+                       class="form-check-input {{ $errors->has('privacy') ? 'border-danger' : '' }}" />
+                <label for="reviewPolicy" class="form-check-label">
+                    @include("tt::policy.check-text")
+                </label>
+            </div>
+
             <div class="flex items-center space-x-indent-half">
                 <button type="button" class="btn btn-outline-secondary" wire:click="closeForm">Отмена</button>
                 <button type="submit" form="reviewForm" class="btn btn-primary"
