@@ -36,20 +36,20 @@ class UserReviewsServiceProvider extends ServiceProvider
         // Views
         $this->loadViewsFrom(__DIR__ . "/resources/views", "ur");
 
-        // Expand config
-        $this->expandConfiguration();
-
         // Livewire
         $this->addLivewireComponents();
 
         // Observers
         $this->observeModels();
         $this->setPolicies();
+
+        // Expand config
+        $this->expandConfiguration();
     }
 
     protected function setPolicies(): void
     {
-        Gate::policy(config("user-reviews.customReviewModel") ?? Review::class, config("user-reviews.reviewPolicyKey"));
+        Gate::policy(config("user-reviews.customReviewModel") ?? Review::class, config("user-reviews.reviewPolicy"));
     }
 
     protected function observeModels(): void
