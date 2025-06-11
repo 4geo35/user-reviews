@@ -5,6 +5,7 @@ namespace GIS\UserReviews;
 use GIS\UserReviews\Interfaces\ReviewInterface;
 use GIS\UserReviews\Models\Review;
 use GIS\UserReviews\Observers\ReviewObserver;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use GIS\UserReviews\Livewire\Web\Reviews\FormWire as WebFormWire;
 use GIS\UserReviews\Livewire\Web\Reviews\ListWire as WebListWire;
@@ -42,6 +43,17 @@ class UserReviewsServiceProvider extends ServiceProvider
         $this->addLivewireComponents();
 
         // Observers
+        $this->observeModels();
+        $this->setPolicies();
+    }
+
+    protected function setPolicies(): void
+    {
+        Gate::policy(config("user-reviews.customReviewModel") ?? Review::class, config("user-reviews.reviewPolicyKey"));
+    }
+
+    protected function observeModels(): void
+    {
         $reviewObserverClass = config("user-reviews.customReviewModelObserver") ?? ReviewObserver::class;
         $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
         $reviewModelClass::observe($reviewObserverClass);
