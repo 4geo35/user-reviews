@@ -23,7 +23,8 @@ class FormWire extends Component
     public string $name = '';
     public string $comment = '';
     public array $images = [];
-    public bool $privacy = true;
+    public bool $privacy = false;
+    public string $hidden = "";
 
     public int|null $reviewId = null;
 
@@ -36,6 +37,7 @@ class FormWire extends Component
             "comment" => ["required", "string"],
             "images.*" => ["nullable", "image", "mimes:jpeg,png,jpg,webp", "max:2048"],
             "privacy" => ["required"],
+            "hidden" => ["nullable", "prohibited"],
         ];
     }
 

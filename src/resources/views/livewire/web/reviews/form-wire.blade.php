@@ -10,6 +10,12 @@
         <form wire:submit.prevent="store" class="space-y-indent-half" id="reviewForm">
             <x-tt::notifications.error prefix="review-form-" />
             <x-tt::notifications.success prefix="review-form-" />
+
+            <div class="m-0 h-0 w-0 overflow-hidden">
+                <input type="text" class="form-control" wire:model="hidden">
+                <x-tt::form.error name="hidden"/>
+            </div>
+
             <div>
                 <input type="text" id="reviewName" placeholder="Ваше имя*" aria-label="Ваше имя"
                        class="form-control {{ $errors->has("name") ? "border-danger" : "" }}"
