@@ -1,4 +1,4 @@
-<div class="p-indent xl:p-indent-double rounded-base bg-linear-150 from-primary/45 to-primary/25 sticky top-indent mb-indent flex flex-wrap items-end justify-between lg:block">
+<div class="p-indent xl:p-indent-double rounded-base bg-linear-150 from-primary/45 to-primary/25 sticky top-sticky mb-indent flex flex-wrap items-end justify-between lg:block">
     <div class="text-body/75 leading-5">
         <div class="text-xl xl:text-2xl font-semibold ">
             Оставьте отзыв <span class="text-nowrap">о нас.</span>
