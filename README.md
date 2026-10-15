@@ -1,12 +1,16 @@
 ### Установка
 
-Добавить `"./vendor/4geo35/user-reviews/src/resources/views/components/**/*.blade.php",
-        "./vendor/4geo35/user-reviews/src/resources/views/admin/**/*.blade.php",
-        "./vendor/4geo35/user-reviews/src/resources/views/livewire/admin/**/*.blade.php",` в `tailwind.admin.config.js`, созданный в пакете `tailwindcss-theme`.
+Добавить в `tailwind.admin.config.js`, созданный в пакете `tailwindcss-theme`.
 
-Добавить `"./vendor/4geo35/user-reviews/src/resources/views/components/**/*.blade.php",
-        "./vendor/4geo35/user-reviews/src/resources/views/web/**/*.blade.php",
-        "./vendor/4geo35/user-reviews/src/resources/views/livewire/web/**/*.blade.php",` в `tailwind.config.js`, созданный в пакете `tailwindcss-theme`.
+    "./vendor/4geo35/user-reviews/src/resources/views/components/**/*.blade.php",
+    "./vendor/4geo35/user-reviews/src/resources/views/admin/**/*.blade.php",
+    "./vendor/4geo35/user-reviews/src/resources/views/livewire/admin/**/*.blade.php",
+
+Добавить в `tailwind.config.js`, созданный в пакете `tailwindcss-theme`.
+
+    "./vendor/4geo35/user-reviews/src/resources/views/components/**/*.blade.php",
+    "./vendor/4geo35/user-reviews/src/resources/views/web/**/*.blade.php",
+    "./vendor/4geo35/user-reviews/src/resources/views/livewire/web/**/*.blade.php",
 
 Запустить миграции для создания таблиц `php artisan migrate`
 
@@ -40,3 +44,18 @@
     <button type="button" class="btn btn-primary" x-data @click="$dispatch('show-review-form')">
         Оставить отзыв
     </button>
+
+#### Views
+
+Сокращение для представлений: `ur`  
+Меню для панели администрирования: `<x-ur::menu-item/>`  
+
+#### Config
+
+Название файла: `user-reviews`
+
+- `webPageUrl` => `reviews`
+- `useBreadcrumbs` => `true`
+- `useH1` => `true`
+- `reviewNotificationEmails` => `env("USER_REVIEW_NOTIFICATION_EMAILS")`
+- `models` => [],

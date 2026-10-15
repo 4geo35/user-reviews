@@ -148,7 +148,7 @@ trait ReviewEditActions
         return $review;
     }
 
-    protected function checkAuth(string $action, ReviewInterface $review = null): bool
+    protected function checkAuth(string $action, ?ReviewInterface $review = null): bool
     {
         try {
             $reviewModelClass = config("user-reviews.customReviewModel") ?? Review::class;
